@@ -1,45 +1,84 @@
 using UnityEngine;
-// Fondamentale per usare il NavMeshAgent
 using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Questa variabile apparirà nell'Ispettore di Unity. 
-    // [Range] crea uno slider comodo da muovere con il mouse da 1 a 20.
     [Header("Impostazioni Movimento")]
-    [Range(1f, 20f)] public float velocitaGiocatore = 3.5f;
+    [Range(1f, 20f)] public float velocitaGiocatore = 5f;
+
+    [Header("Filtri di Collisione")]
+    public LayerMask layerDelPavimento;
+    public LayerMask layerPorte; // NUOVO: Crea e seleziona un Layer chiamato "Porte"
 
     private NavMeshAgent agent;
     private Camera mainCamera;
+
+    // Variabile di supporto per gestire l'interazione con la porta
+    private PortaInterattiva portaTarget;
+    private bool inViaggioVersoPorta = false;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
-
-        // Applichiamo la velocità iniziale impostata nello script al NavMeshAgent
-        agent.speed = velocitaGiocatore;
+        if (agent != null) agent.speed = velocitaGiocatore;
     }
 
     void Update()
     {
-        // Questo controllo serve per aggiornare la velocità in tempo reale 
-        // se la sposti nell'Ispettore mentre il gioco è in esecuzione (Playmode)
-        if (agent.speed != velocitaGiocatore)
+        if (agent != null && agent.speed != velocitaGiocatore) agent.speed = velocitaGiocatore;
+
+        // CONTROLLO DI DISTANZA: Se stiamo andando verso una porta, controlliamo se siamo arrivati davanti
+        if (inViaggioVersoPorta && portaTarget != null)
         {
-            agent.speed = velocitaGiocatore;
+            // Calcoliamo la distanza rimanente sulla NavMesh
+            if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + 0.2f)
+            {
+                Teletrasporta(portaTarget.puntoDiAtterraggio.position);
+                ResetObiettivoPorta();
+            }
         }
 
-        // Logica del click del mouse (identica a prima)
+        // INPUT MOUSE
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 100f))
+            // 1. TEST: Abbiamo cliccato una PORTA?
+            if (Physics.Raycast(ray, out hit, 1000f, layerPorte))
             {
+                PortaInterattiva porta = hit.collider.GetComponent<PortaInterattiva>();
+                if (porta != null)
+                {
+                    portaTarget = porta;
+                    inViaggioVersoPorta = true;
+                    agent.SetDestination(portaTarget.PosizioneInterazione);
+                    return; // Interrompiamo l'Update qui così non esegue il click sul pavimento
+                }
+            }
+
+            // 2. TEST: Se non abbiamo cliccato una porta, controlliamo il pavimento normalmente
+            if (Physics.Raycast(ray, out hit, 1000f, layerDelPavimento))
+            {
+                ResetObiettivoPorta();
                 agent.SetDestination(hit.point);
             }
         }
+    }
+
+    void Teletrasporta(Vector3 nuovaPosizione)
+    {
+        // Per teletrasportare un NavMeshAgent senza bug, bisogna disattivarlo un istante,
+        // cambiare posizione e riattivarlo.
+        agent.enabled = false;
+        transform.position = nuovaPosizione;
+        agent.enabled = true;
+    }
+
+    void ResetObiettivoPorta()
+    {
+        portaTarget = null;
+        inViaggioVersoPorta = false;
     }
 }
