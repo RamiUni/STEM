@@ -2,24 +2,35 @@ using UnityEngine;
 
 public class PCClick : MonoBehaviour
 {
-    // Quando il giocatore clicca sul PC
+    [Header("Risposta di questo PC")]
+    public string thisAnswer;
+
+    [Header("Immagini di questo PC")]
+    public Sprite puzzleSprite;
+    public Sprite successSprite;
+
+    // Ogni PC tiene traccia del proprio completamento
+    private bool completed = false;
+
     void OnMouseDown()
     {
-        // Apre il pannello del PC tramite il manager
-        PCManager.instance.OpenPC();
+        // Passa sé stesso come riferimento al manager
+        PCManager.instance.OpenPC(thisAnswer, puzzleSprite, successSprite, completed, this);
     }
 
-    // Quando il cursore entra sopra il PC
+    // Chiamato dal PCManager quando la risposta è corretta
+    public void SetCompleted()
+    {
+        completed = true;
+    }
+
     void OnMouseEnter()
     {
-        // Mostra il tooltip "Interagisci"
         PCManager.instance.ShowTooltip();
     }
 
-    // Quando il cursore esce dal PC
     void OnMouseExit()
     {
-        // Nasconde il tooltip
         PCManager.instance.HideTooltip();
     }
 }

@@ -8,22 +8,29 @@ public class PCManager : MonoBehaviour
     public static PCManager instance;
 
     [Header("Pannello principale")]
-    public GameObject pcPanel;          // Il pannello del PC
-    public Button closeButton;          // Bottone per chiudere
+    public GameObject pcPanel;
+    public Button closeButton;
 
     [Header("Schermate")]
-    public GameObject screen1;          // Prima schermata con il puzzle
-    public GameObject screen2;          // Seconda schermata di successo
+    public GameObject screen1;
+    public GameObject screen2;
+
+    [Header("Schermata errore")]
+    public GameObject errorScreen;
 
     [Header("Input")]
-    public TMP_InputField inputField;   // Campo di testo dove il giocatore scrive
-    public Button submitButton;         // Bottone per confermare la risposta
+    public TMP_InputField inputField;
+    public Button submitButton;
 
-    [Header("Risposta corretta")]
-    public string correctAnswer;        // Scrivi qui la risposta giusta nell'Inspector
+    [Header("Immagini")]
+    public Image puzzleImage;
+    public Image successImage;
 
     [Header("Tooltip")]
-    public TextMeshProUGUI tooltipText; // Il tooltip "Interagisci"
+    public TextMeshProUGUI tooltipText;
+
+    // Variabile privata che salva la risposta corretta del PC attuale
+    private string correctAnswer;
 
     void Awake()
     {
@@ -33,30 +40,81 @@ public class PCManager : MonoBehaviour
 
     void Start()
     {
-        // Nasconde tutto all'inizio
+        // Nasconde tutto all'avvio
         pcPanel.SetActive(false);
         tooltipText.gameObject.SetActive(false);
 
-        // Collega i bottoni alle funzioni
+        // Collega il bottone chiudi principale
         closeButton.onClick.AddListener(ClosePC);
+
+        // Collega il bottone conferma alla funzione CheckAnswer
         submitButton.onClick.AddListener(CheckAnswer);
+
+        // Collega il bottone chiudi dentro Screen2
+        Button closeSuccessBtn = screen2.GetComponentInChildren<Button>();
+        closeSuccessBtn.onClick.AddListener(ClosePC);
     }
 
-    // Apre il pannello del PC
-    public void OpenPC()
+    void Update()
     {
-        // Mostra il pannello
+        // Se la schermata errore è attiva e il giocatore clicca, la chiude
+        if (errorScreen.activeSelf && Input.GetMouseButtonDown(0))
+        {
+            errorScreen.SetActive(false);
+        }
+    }
+
+    // Apre il pannello del PC con risposta e immagini specifiche
+    // Riferimento al PC attualmente aperto
+    private PCClick currentPC;
+
+    public void OpenPC(string answer, Sprite puzzle, Sprite success, bool completed, PCClick sender)
+    {
+        // Salva il riferimento al PC mittente
+        currentPC = sender;
+
+        // Imposta le immagini specifiche di questo PC
+        puzzleImage.sprite = puzzle;
+        successImage.sprite = success;
+
         pcPanel.SetActive(true);
-
-        // Mostra la prima schermata e nasconde la seconda
-        screen1.SetActive(true);
-        screen2.SetActive(false);
-
-        // Svuota il campo di testo
-        inputField.text = "";
-
-        // Nasconde il tooltip quando apri il PC
         HideTooltip();
+
+        // Se questo PC specifico è già completato mostra successo
+        if (completed)
+        {
+            screen1.SetActive(false);
+            screen2.SetActive(true);
+            errorScreen.SetActive(false);
+        }
+        else
+        {
+            correctAnswer = answer;
+            screen1.SetActive(true);
+            screen2.SetActive(false);
+            errorScreen.SetActive(false);
+            inputField.text = "";
+        }
+    }
+
+    public void CheckAnswer()
+    {
+        string playerAnswer = inputField.text.Trim().ToLower();
+
+        if (playerAnswer == correctAnswer.Trim().ToLower())
+        {
+            screen1.SetActive(false);
+            screen2.SetActive(true);
+
+            // Marca come completato il PC specifico che è aperto
+            if (currentPC != null)
+                currentPC.SetCompleted();
+        }
+        else
+        {
+            errorScreen.SetActive(true);
+            inputField.text = "";
+        }
     }
 
     // Chiude il pannello del PC
@@ -65,40 +123,17 @@ public class PCManager : MonoBehaviour
         pcPanel.SetActive(false);
     }
 
-    // Controlla se la risposta è giusta
-    public void CheckAnswer()
-    {
-        // Prende il testo scritto dal giocatore, rimuove spazi e ignora maiuscole/minuscole
-        string playerAnswer = inputField.text.Trim().ToLower();
-
-        // Confronta con la risposta corretta
-        if (playerAnswer == correctAnswer.Trim().ToLower())
-        {
-            // Risposta giusta — cambia schermata
-            screen1.SetActive(false);
-            screen2.SetActive(true);
-        }
-        else
-        {
-            // Risposta sbagliata — svuota il campo e magari aggiungi un feedback
-            inputField.text = "";
-            Debug.Log("Risposta sbagliata!");
-        }
-    }
-
-    // Mostra il tooltip "Interagisci"
+    // Mostra tooltip
     public void ShowTooltip()
     {
-        // Controlla che il tooltip esista prima di usarlo
         if (tooltipText == null) return;
         tooltipText.gameObject.SetActive(true);
         tooltipText.text = "Interagisci";
     }
 
-    // Nasconde il tooltip
+    // Nasconde tooltip
     public void HideTooltip()
     {
-        // Controlla che il tooltip esista prima di usarlo
         if (tooltipText == null) return;
         tooltipText.gameObject.SetActive(false);
     }
