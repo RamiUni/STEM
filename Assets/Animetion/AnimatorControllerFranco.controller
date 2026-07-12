@@ -66,7 +66,7 @@ AnimatorStateMachine:
     m_Position: {x: 475.53552, y: 227.7059, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7042032474915676166}
-    m_Position: {x: 180, y: 340, z: 0}
+    m_Position: {x: 220, y: 350, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -140,6 +140,18 @@ AnimatorController:
   m_AnimatorParameters:
   - m_Name: Speed
     m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: FrancoRipara
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: AfferraFranco
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0

@@ -63,6 +63,14 @@ public class PlayerMovement : MonoBehaviour
                 if (hit.collider.GetComponent<BookClick>() != null) return;
                 if (hit.collider.GetComponent<PCClick>() != null) return;
 
+                //-----------------------------------------------------------------------------------------------------------------------------
+                if (hit.collider.GetComponent<BookClick>() != null) return;
+                if (hit.collider.GetComponent<PCClick>() != null) return;
+                if (hit.collider.GetComponent<IngranaggiClick>() != null) return;
+                if (hit.collider.GetComponent<BraccioClick>() != null) return;
+                if (hit.collider.GetComponent<LavagnaClick>() != null) return;
+                //-----------------------------------------------------------------------------------------------------------------------------
+
                 agent.SetDestination(hit.point);
             }
         }

@@ -1,11 +1,9 @@
 fileFormatVersion: 2
-guid: 9e706546191c5a54f90c679b2e89007d
+guid: e1a545f45f8312d448a80bc5d71d2471
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - myMixer: {instanceID: 0}
-  - muscicSlider: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
