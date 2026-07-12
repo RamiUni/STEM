@@ -1,27 +1,31 @@
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.EventSystems;
+using UnityEngine.EventSystems; // Manteniamo la gestione della UI
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Impostazioni Movimento")]
     [Range(1f, 20f)] public float velocitaGiocatore = 3.5f;
 
+    [Header("Filtro di Collisione")]
+    [Tooltip("Seleziona qui il Layer associato al tuo pavimento")]
+    public LayerMask layerDelPavimento;
+
     [Header("Audio")]
     public AudioClip walkSound;
 
     private NavMeshAgent agent;
-    private Camera mainCamera;
+    private Camera cameraAttiva; // Modificato per supportare più telecamere
     private Animator animator;
     private AudioSource audioSource;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        mainCamera = Camera.main;
         agent.speed = velocitaGiocatore;
         animator = GetComponentInChildren<Animator>();
 
+        // Configurazione Audio del tuo vecchio script
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -32,12 +36,14 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Manteniamo la gestione delle animazioni
         if (animator != null)
             animator.SetFloat("Speed", agent.velocity.magnitude);
 
         if (agent.speed != velocitaGiocatore)
             agent.speed = velocitaGiocatore;
 
+        // Manteniamo la gestione del suono dei passi
         if (agent.velocity.magnitude > 0.1f)
         {
             if (!audioSource.isPlaying)
@@ -49,29 +55,32 @@ public class PlayerMovement : MonoBehaviour
                 audioSource.Stop();
         }
 
+        // INPUT MOUSE
         if (Input.GetMouseButtonDown(0))
         {
+            // Blocca il movimento se stai cliccando su un elemento dell'interfaccia/UI
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 return;
 
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            int layerMask = ~LayerMask.GetMask("Player");
+            // LA SVOLTA: Pesca la telecamera della stanza in cui ti trovi attualmente
+            cameraAttiva = Camera.main;
 
-            if (Physics.Raycast(ray, out hit, 100f, layerMask))
+            if (cameraAttiva != null)
             {
-                if (hit.collider.GetComponent<BookClick>() != null) return;
-                if (hit.collider.GetComponent<PCClick>() != null) return;
+                Ray ray = cameraAttiva.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
 
-                //-----------------------------------------------------------------------------------------------------------------------------
-                if (hit.collider.GetComponent<BookClick>() != null) return;
-                if (hit.collider.GetComponent<PCClick>() != null) return;
-                if (hit.collider.GetComponent<IngranaggiClick>() != null) return;
-                if (hit.collider.GetComponent<BraccioClick>() != null) return;
-                if (hit.collider.GetComponent<LavagnaClick>() != null) return;
-                //-----------------------------------------------------------------------------------------------------------------------------
-
-                agent.SetDestination(hit.point);
+                // Spariamo il raggio SOLO sul layer del pavimento.
+                // Avendo il filtro specifico, non servono più tutti quegli "if" per bloccare i click 
+                // su BookClick, PCClick, ecc., perché il mouse cercherà solo il pavimento!
+                if (Physics.Raycast(ray, out hit, 1000f, layerDelPavimento))
+                {
+                    agent.SetDestination(hit.point);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Nessuna telecamera attiva con il Tag 'MainCamera' trovata nella scena!");
             }
         }
     }
