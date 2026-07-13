@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Impostazioni Movimento")]
     [Range(1f, 20f)] public float velocitaGiocatore = 3.5f;
+    [Tooltip("Più alto è il valore, più velocemente e morbidamente si girerà il PG verso la direzione del movimento")]
+    public float velocitaRotazioneInCurva = 15f;
 
     [Header("Filtro di Collisione")]
     [Tooltip("Seleziona qui il Layer associato al tuo pavimento")]
@@ -23,6 +25,14 @@ public class PlayerMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = velocitaGiocatore;
+
+        // Disattiviamo la rotazione rigida automatica dell'agent.
+        // La gestiamo noi nell'Update in modo molto più fluido e morbido!
+        agent.updateRotation = false;
+
+        // Diamo una spinta all'accelerazione per evitare che il PG slitti come sul ghiaccio
+        agent.acceleration = 30f;
+
         animator = GetComponentInChildren<Animator>();
 
         // Configurazione Audio del tuo vecchio script
@@ -55,10 +65,19 @@ public class PlayerMovement : MonoBehaviour
                 audioSource.Stop();
         }
 
+        // ROTAZIONE MORBIDA (Tocco di classe per la fluidità)
+        // Se il personaggio sta camminando, lo ruotiamo gradualmente verso la direzione della NavMesh
+        if (agent.velocity.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(agent.velocity.normalized);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * velocitaRotazioneInCurva);
+        }
+
         // INPUT MOUSE
         if (Input.GetMouseButtonDown(0))
         {
-            // Blocca il movimento se stai cliccando su un elemento dell'interfaccia/UI
+            // IL BLOCCO CANVAS: Posizionato in cima a tutto. Se tocchi un'interfaccia o un bottone,
+            // blocca immediatamente il click impedendo al PG di correre per la stanza.
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
                 return;
 
