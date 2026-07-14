@@ -137,4 +137,11 @@ public class PCManager : MonoBehaviour
         if (tooltipText == null) return;
         tooltipText.gameObject.SetActive(false);
     }
+
+    private void ChiudiLivello()
+    {
+        Debug.Log("Livello ingranaggi completato!");
+        GameManager.instance.CompletaSfida("Informatica");
+    }
+    
 }

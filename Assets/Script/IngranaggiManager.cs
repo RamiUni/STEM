@@ -129,7 +129,7 @@ public class IngranaggiManager : MonoBehaviour
 
     private void ChiudiLivello()
     {
-        // Per ora stampa in console — poi collegherai il tuo sistema di porte
         Debug.Log("Livello ingranaggi completato!");
+        GameManager.instance.CompletaSfida("Ingegneria");
     }
 }

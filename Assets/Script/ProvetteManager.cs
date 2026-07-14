@@ -47,6 +47,9 @@ public class ProvetteManager : MonoBehaviour
 
     public void InteragisciConMixer()
     {
+        Debug.Log("Ossigeno: " + ossigenoTrovato + "/" + ossigenoNecessario);
+        Debug.Log("Idrogeno: " + idrogenoTrovato + "/" + idrogenoNecessario);
+
         if (!HaTutteLeProvette())
         {
             string mancano = "";
@@ -65,16 +68,20 @@ public class ProvetteManager : MonoBehaviour
 
     private IEnumerator MixerCoroutine()
     {
+        Debug.Log("MixerCoroutine partita");
         MostraMessaggio("Stai mescolando le provette...");
+        Debug.Log("Messaggio mostrato");
         yield return new WaitForSeconds(2f);
         MostraMessaggio("Hai creato l'acqua! H2O!");
         yield return new WaitForSeconds(3f);
         Debug.Log("Livello scienze completato!");
+
+        GameManager.instance.CompletaSfida("Scienza");
     }
 
     public void MostraMessaggio(string testo)
     {
-        StopAllCoroutines();
+        StopCoroutine("NascondiMessaggio"); // ← solo questa, non StopAllCoroutines
         messaggioText.text = testo;
         messaggioPanel.SetActive(true);
         StartCoroutine(NascondiMessaggio());

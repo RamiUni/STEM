@@ -44,4 +44,24 @@ public class BookManager : MonoBehaviour
     {
         tooltipText.gameObject.SetActive(false);
     }
+
+    public Image bookImage; // trascina BookImage qui nell'Inspector
+
+    public void OpenBook(BookData data)
+    {
+        bookTextField.text = data.bookText;
+
+        // Mostra l'immagine solo se esiste
+        if (data.bookImage != null)
+        {
+            bookImage.sprite = data.bookImage;
+            bookImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            bookImage.gameObject.SetActive(false);
+        }
+
+        bookPanel.SetActive(true);
+    }
 }

@@ -11,7 +11,8 @@ public class BookClick : MonoBehaviour
 
     void OnMouseDown()
     {
-        BookManager.instance.OpenBook(bookData.bookText);
+        BookData data = GetComponent<BookData>();
+        BookManager.instance.OpenBook(data);
     }
 
     void OnMouseEnter()

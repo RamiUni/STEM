@@ -229,6 +229,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 2007686892}
+        m_TargetAssemblyTypeName: AudioMenager, Assembly-CSharp
+        m_MethodName: PlayClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &83318726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,6 +471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myMixer: {fileID: 24100000, guid: 4b78ef2cb1b62b24d8198cad1818fb4f, type: 2}
   muscicSlider: {fileID: 897949020}
+  SFXSlider: {fileID: 1988657349}
 --- !u!1 &202732064
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,6 +929,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2007686892}
+        m_TargetAssemblyTypeName: AudioMenager, Assembly-CSharp
+        m_MethodName: PlayClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &422848683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -964,6 +989,7 @@ GameObject:
   m_Component:
   - component: {fileID: 482655080}
   - component: {fileID: 482655079}
+  - component: {fileID: 482655081}
   m_Layer: 0
   m_Name: SFX
   m_TagString: Untagged
@@ -980,7 +1006,7 @@ AudioSource:
   m_GameObject: {fileID: 482655078}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2808858049075290038, guid: 4b78ef2cb1b62b24d8198cad1818fb4f, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -1082,6 +1108,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2007686893}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &482655081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482655078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 964c718fa763df747939620f7fa273d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &532659895
 GameObject:
   m_ObjectHideFlags: 0
@@ -1878,7 +1916,7 @@ MonoBehaviour:
   m_MinValue: 0.001
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.001
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2055,6 +2093,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1624250369}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2007686892}
+        m_TargetAssemblyTypeName: AudioMenager, Assembly-CSharp
+        m_MethodName: PlayClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2243,6 +2293,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2007686892}
+        m_TargetAssemblyTypeName: AudioMenager, Assembly-CSharp
+        m_MethodName: PlayClick
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2646,7 +2708,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 6441419593205156919, guid: 4b78ef2cb1b62b24d8198cad1818fb4f, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3020,13 +3082,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 317603778}
   m_HandleRect: {fileID: 171205759}
   m_Direction: 0
-  m_MinValue: -80
-  m_MaxValue: 0
+  m_MinValue: 0.001
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.001
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 172230173}
+        m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
+        m_MethodName: SetSFXVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2007686891
 GameObject:
   m_ObjectHideFlags: 0
@@ -3059,6 +3133,14 @@ MonoBehaviour:
   musicSource: {fileID: 1621647594}
   SFXSource: {fileID: 482655079}
   background: {fileID: 8300000, guid: 6d89fb94fcc74ad42a9268dcf3ebd1dc, type: 3}
+  click: {fileID: 8300000, guid: 105d0537b8c1b804eb1a82e138633c85, type: 3}
+  cAnswer: {fileID: 8300000, guid: 0cecf074df765e84c9e40c375e27626d, type: 3}
+  wAnswer: {fileID: 8300000, guid: 9864cfd7a94239248aaac1da856762cf, type: 3}
+  fixing: {fileID: 8300000, guid: 0ebd9669e07c1d4489655196ab964fdc, type: 3}
+  mixer: {fileID: 8300000, guid: 356ffadd60e35244a938109b156f9424, type: 3}
+  raccolta: {fileID: 8300000, guid: eac7a5d823b662e4aaceadc390469d9f, type: 3}
+  robot: {fileID: 8300000, guid: bddfa2b61b7746a4a924c22c335929c5, type: 3}
+  walk: {fileID: 8300000, guid: b01350952e53dcb46a8dd7fbd231069e, type: 3}
   myMixer: {fileID: 24100000, guid: 4b78ef2cb1b62b24d8198cad1818fb4f, type: 2}
 --- !u!4 &2007686893
 Transform:

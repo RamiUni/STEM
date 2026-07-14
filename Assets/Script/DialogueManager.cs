@@ -66,5 +66,9 @@ public class DialogueManager : MonoBehaviour
     {
         dialogoAttivo = false;
         pannelloDialogo.SetActive(false);
+
+        // Notifica il GameManager che il dialogo è finito
+        if (GameManager.instance != null)
+            GameManager.instance.MostraCrediti();
     }
 }
